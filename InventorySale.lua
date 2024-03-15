@@ -1,21 +1,21 @@
 SLASH_IS1 = "/IS"
 
-ISale_Ads = "";--"\n\n\nAutomatic inventory -> BBCode script by rexas (Emerald Dream). Download at http://rexas.net/wow or https://github.com/jejkas/InventorySale";
+gBank_Ads = "";--"\n\n\nAutomatic inventory -> BBCode script by rexas (Emerald Dream). Download at http://rexas.net/wow or https://github.com/jejkas/InventorySale";
 
 SlashCmdList["IS"] = function(args)
-	if ISaleFrame:IsShown() then
-		ISaleFrame:Hide();
+	if gBankFrame:IsShown() then
+		gBankFrame:Hide();
 	else
-		ISaleFrame:Show();
-		Isale_text:SetText(ISale_GetBBCode());
+		gBankFrame:Show();
+		gBank_text:SetText(gBank_getItems());
 	end
 end
 
-ISaleScriptFrame = CreateFrame("FRAME", "ISaleScriptFrame");
-function ISale_OnUpdateEvent(self, event, ...)
+gBankScriptFrame = CreateFrame("FRAME", "gBankScriptFrame");
+function gBank_OnUpdateEvent(self, event, ...)
 end
 
-function ISale_Run()
+function gBank_Run()
 	local str = "";
 	
 	for bag = -1,11 do
@@ -26,27 +26,20 @@ function ISale_Run()
 			then
 				--local found, _, itemString = string.find(item, "^|%x+|Hitem\:(.+)\:%[.+%]");
 				local a, b, color, d, name = string.find(item, "|c(%x+)|Hitem:(%d+:%d+:%d+:%d+)|h%[(.-)%]|h|r")
-				color = string.sub(color,3);
-				local id = ISale_strsplit(":",d);
+				local id = gBank_strsplit(":",d);
 				id = id[1];
 				
 				if name ~= "Hearthstone"
 				then
-					local r, g, b, hex = GetItemQualityColor(0);
 					--printDebug(a .. " - " .. b .. " - " .. color .. " - " .. id .. " - " .. name .. " x " .. itemCount);
-					if type(ISale_ItemList[name]) ~= "table"
+					if type(gBank_ItemList[name]) ~= "table"
 					then
-						ISale_ItemList[name] = {};
-						ISale_ItemList[name]["amount"] = 0;
+						gBank_ItemList[name] = {};
+						gBank_ItemList[name]["amount"] = 0;
 					end;
-					ISale_ItemList[name]["id"] = id;
-					ISale_ItemList[name]["name"] = name;
-					if(color == "ffffff")
-					then
-						color = "aabbcc"
-					end;
-					ISale_ItemList[name]["color"] = color;
-					ISale_ItemList[name]["amount"] = ISale_ItemList[name]["amount"] + itemCount;
+					gBank_ItemList[name]["id"] = id;
+					gBank_ItemList[name]["name"] = name;
+					gBank_ItemList[name]["amount"] = gBank_ItemList[name]["amount"] + itemCount;
 				end;
 			end
 		end
@@ -56,13 +49,13 @@ end;
 
 
 
-function ISale_GetBBCode()
+function gBank_getItems()
 	local str = "";
-	if ISale_ItemList
+	if gBank_ItemList
 	then
-		for id, line in pairsByKeys(ISale_ItemList)
+		for id, line in pairsByKeys(gBank_ItemList)
 		do
-			str = str .. "[url=\"http://db.vanillagaming.org/?item=".. ISale_ItemList[id]["id"] .."\"][color=#"..ISale_ItemList[id]["color"].."][".. ISale_ItemList[id]["name"] .."][/color][/url] x " .. ISale_ItemList[id]["amount"] .. "\n";
+			str = str .. gBank_ItemList[id]["name"] ..";".. UnitName("player") ..";".. gBank_ItemList[id]["amount"] .. ";".. gBank_ItemList[id]["id"] .. "\n";
 		end
 	end
 	return str;
@@ -72,23 +65,23 @@ end
 
 
 
-function ISale_ResetData()
-	ISale_ItemList = {};
+function gBank_ResetData()
+	gBank_ItemList = {};
 end
 
 
 
 
 
-function ISale_OnLoad()
+function gBank_OnLoad()
 end;
 
-function ISale_eventHandler()
+function gBank_eventHandler()
 	if event == "ADDON_LOADED" and arg1 == "InventorySale"
 	then
-		if ISale_ItemList == nil or not ISale_ItemList
+		if gBank_ItemList == nil or not gBank_ItemList
 		then
-			ISale_ItemList = {};
+			gBank_ItemList = {};
 		end
 	end
 	
@@ -96,11 +89,11 @@ end
 
 -- Event stuff
 
-ISaleScriptFrame:SetScript("OnUpdate", ISale_OnUpdateEvent);
-ISaleScriptFrame:SetScript("OnEvent", ISale_eventHandler);
-ISaleScriptFrame:RegisterEvent("ENTER_WORLD");
-ISaleScriptFrame:RegisterEvent("CHAT_MSG_RAID_LEADER");
-ISaleScriptFrame:RegisterEvent("ADDON_LOADED");
+gBankScriptFrame:SetScript("OnUpdate", gBank_OnUpdateEvent);
+gBankScriptFrame:SetScript("OnEvent", gBank_eventHandler);
+gBankScriptFrame:RegisterEvent("ENTER_WORLD");
+gBankScriptFrame:RegisterEvent("CHAT_MSG_RAID_LEADER");
+gBankScriptFrame:RegisterEvent("ADDON_LOADED");
 
 -- Message stuff
 
@@ -127,7 +120,7 @@ function printArray(arr)
 	end
 end;
 
-function ISale_strsplit(sep,str)
+function gBank_strsplit(sep,str)
 	local arr = {}
 	local tmp = "";
 	

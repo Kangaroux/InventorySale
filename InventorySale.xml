@@ -1,14 +1,14 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 	..\FrameXML\UI.xsd">
 	
-	<GameTooltip name="ISaleTooltip" frameStrata="TOOLTIP" hidden="true" inherits="GameTooltipTemplate">
+	<GameTooltip name="gBankTooltip" frameStrata="TOOLTIP" hidden="true" inherits="GameTooltipTemplate">
 		<Scripts>
 			<OnLoad>
 				this:SetOwner(UIParent,"ANCHOR_NONE")
 			</OnLoad>
 		</Scripts> 
 	</GameTooltip>
-   <Frame name="ISaleFrame" toplevel="true" enableMouse="true" hidden="true">
+   <Frame name="gBankFrame" toplevel="true" enableMouse="true" hidden="true">
      <Size>
        <AbsDimension x="1000" y="500" />
      </Size>
@@ -30,7 +30,7 @@
 	 
 	 
 	 <Frames>
-		<Button name="ISaleRun" inherits="GameMenuButtonTemplate" text="Run">
+		<Button name="gBankRun" inherits="GameMenuButtonTemplate" text="Run">
 			<Anchors>
 				<Anchor point="CENTER" relativePoint="BOTTOM">
 					<Offset>
@@ -40,12 +40,12 @@
 			</Anchors>
 			<Scripts>
 				<OnClick>
-					ISale_Run();
-					Isale_text:SetText(ISale_GetBBCode());
+					gBank_Run();
+					gBank_text:SetText(gBank_getItems());
 				</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="ISaleRun" inherits="GameMenuButtonTemplate" text="Reset">
+		<Button name="gBankRun" inherits="GameMenuButtonTemplate" text="Reset">
 			<Anchors>
 				<Anchor point="CENTER" relativePoint="BOTTOMRIGHT">
 					<Offset>
@@ -55,12 +55,12 @@
 			</Anchors>
 			<Scripts>
 				<OnClick>
-					ISale_ResetData();
-					Isale_text:SetText(ISale_GetBBCode());
+					gBank_ResetData();
+					gBank_text:SetText(gBank_getItems());
 				</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="ISaleClose" inherits="GameMenuButtonTemplate" text="Close">
+		<Button name="gBankClose" inherits="GameMenuButtonTemplate" text="Close">
 			<Anchors>
 				<Anchor point="CENTER" relativePoint="BOTTOMRIGHT">
 					<Offset>
@@ -74,7 +74,7 @@
 				</OnClick>
 			</Scripts>
 		</Button>
-		<EditBox name="Isale_text" autoFocus="false" multiLine="true">
+		<EditBox name="gBank_text" autoFocus="false" multiLine="true">
 			<Size x="950" y="450" />
 			<Anchors>
 				<Anchor point="TOPLEFT">
